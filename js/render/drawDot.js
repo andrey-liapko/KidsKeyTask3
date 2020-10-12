@@ -1,24 +1,13 @@
-import { dots } from "../main.js";
-import collision from "../mathFunctions/collision.js";
+import { app, dots, dotsXY } from "../main.js";
 
-export default function drawDot(event) {
+export default function drawDot(dotXY) {
     const dot = new PIXI.Graphics();
 
     dot.beginFill(0x000000, 1);
     dot.drawCircle(0, 0, 3);
     dot.endFill();
-    dot.position.copyFrom(event.data.global);
+    dot.x = dotXY.x;
+    dot.y = dotXY.y;
     dot.pivot.set(0.5);
-
-    let flag = true;
-    for (let i = 0; i < dots.children.length; i++) {
-        if (collision(dots.children[i], dot)) {
-            flag = false;
-            break;
-        }
-    }
-
-    if (flag) {
-        dots.addChild(dot);
-    }
+    dots.addChild(dot);
 }

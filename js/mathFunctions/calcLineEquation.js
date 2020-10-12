@@ -1,37 +1,51 @@
-export default function calcLineEquation(dots) {
-    dots.sort((a, b) => {
+export default function calcLineEquation(dotsXY) {
+    dotsXY.sort((a, b) => {
         return a.y - b.y;
     });
+    const yMax = dotsXY[0].y;
+    const yMin = dotsXY[dotsXY.length - 1].y;
 
-    const middleDotY = (dots[3].y + dots[4].y) / 2;
+    dotsXY.sort((a, b) => {
+        if (a.x != b.x) {
+            return a.x - b.x;
+        } else {
+            return a.y - b.y;
+        }
+    });
+    //const middleIndex = dotsXY.length / 2 - 1;
 
-    return middleDotY;
+    const middleDot = {
+        x: (dotsXY[dotsXY.length / 2 - 1].x + dotsXY[dotsXY.length / 2].x) / 2,
+        y: (dotsXY[dotsXY.length / 2 - 1].y + dotsXY[dotsXY.length / 2].y) / 2,
+    };
+    let dot1 = { x: null, y: null };
+    let dot1Index;
 
-    /*const middleDotX = (dots[0].x + dots[1].x) / 2;
-    const middleDotY = (dots[0].y + dots[1].y) / 2;
+    for (dot1Index = 0; dot1Index < dotsXY.length / 2; dot1Index++) {
+        if (dotsXY[dotsXY.length / 2 - dot1Index].x != middleDot.x) {
+            dot1.x = dotsXY[dotsXY.length / 2 - dot1Index].x;
+            dot1.y = middleDot.y - 1;
+            break;
+        }
+    }
 
-    const upperDotX = (dots[6].x + dots[7].x) / 2;
-    const upperDotY = (dots[6].y + dots[7].y) / 2;
+    if (dot1.x == undefined) {
+        dot1.x = middleDot.x - 1;
+        dot1.y = dotsXY[dotsXY.length / 2 - dot1Index].y;
+    }
 
+    const lineDot1 = {
+        x: middleDot.x,
+        y: (middleDot.y + dot1.y) / 2,
+    };
+    const lineDot2 = {
+        x: middleDot.x + (middleDot.x - dot1.x) / 2,
+        y: middleDot.y - yMax + yMin,
+    };
 
-    const lineStartY = ((-upperDotX)*(upperDotY - middleDotY))/(upperDotX - middleDotX) + upperDotY;
-    const lineEndY = ((lineLength-upperDotX)*(upperDotY - middleDotY))/(upperDotX - middleDotX) + upperDotY;
+    const lineA = lineDot1.y - lineDot2.y;
+    const lineB = lineDot2.x - lineDot1.x;
+    const lineC = lineDot1.x * lineDot2.y - lineDot2.x * lineDot1.y;
 
-    line.lineStyle(1, 0x000000);
-    line.moveTo(0, lineStartY);
-    line.lineTo(app.screen.width, lineEndY);*/
-
-    //const middleDotX = (dots[3].x + dots[4].x) / 2;
-    /*const middleDotX = (dots[3].x + dots[4].x) / 2;
-    const middleDotY = (dots[3].y + dots[4].y) / 2;
-
-    const directionVectorA = dots[3].x - dots[2].x;
-    const directionVectorB = dots[3].y - dots[2].y;
-    
-    const lineA = directionVectorB;
-    const lineB = directionVectorA;
-    const lineC = middleDotY * directionVectorA -(middleDotX * directionVectorB);
-
-    const startLineY = -(lineC / lineB);
-    const endLineY = -(lineA * lineLength + lineC)/lineB;*/
+    return { A: lineA, B: lineB, C: lineC };
 }

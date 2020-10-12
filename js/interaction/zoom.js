@@ -1,5 +1,6 @@
+import { app, dotsXY,dots, line } from "../main.js";
+import drawDot from "../render/drawDot.js";
 import drawLine from "../render/drawLine.js";
-import { app } from "../main.js";
 
 export default function zoom(e) {
     e = e || window.event;
@@ -24,6 +25,4 @@ export default function zoom(e) {
     app.stage.y -= newScreenPos.y - y;
     app.stage.scale.x = newScale.x;
     app.stage.scale.y = newScale.y;
-
-    drawLine();
 }
